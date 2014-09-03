@@ -1,0 +1,39 @@
+// ## 3.1 + 3.2: Constructor object + Prototype
+
+function Person(name) {
+	this.name = name;
+}
+
+Person.prototype.speak = function = () {
+	console.log(‘Hi, my name is ’ this.name);
+}
+
+Person.prototype.walk = function = () {
+	console.log(‘Hi, I'm walking');
+}
+
+Person.prototype.eat = function = () {
+	console.log(‘Hi, I'm eating food');
+}
+
+var bob = new Person(‘Bob);
+
+bob.speak();
+
+
+// ## 3.3: Object literal
+var Person = {
+	name: ‘Bob’,
+
+	speak: function () {
+		console.log(‘Hi, my name is’ + this.name)
+	}
+	walk: function () {
+		console.log(‘Hi, I'm walking')
+	}
+	eat: function () {
+		console.log(‘Hi, I'm eating food!')
+	}		
+}
+
+

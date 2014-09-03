@@ -1,0 +1,31 @@
+2.1: No jQuery, why?
+
+Voordelen jQuery
+1. Weinig code
+2. Snel
+3. Makkelijk te begrijpen
+4. cross-browser compatible
+5. De bestandgrootte van jQuery is klein
+6. Grote community
+7. Veel plugins
+
+Nadelen jQuery
+1. jquery.js file of link naar jquery is nodig
+2. functionaliteit kan beperkt zijn (http://www.jscripters.com/jquery-disadvantages-and-advantages/)
+3. Het is aan de andere kant groot: je krijgt veel maar gebruikt weinig
+4. Elke keer wordt de hele jquery aangeroepen, wat veel batterij kost voor een smartphone
+
+2.2: 5 functionaliteiten jquery
+1. Javascript animation
+2. Valideren/bevestigen
+3. Single page apps
+4. Events
+5. Dom selector
+
+2.3: Mirco libraries
+1. Javascript animation: Viper.js (https://github.com/alpha123/Viper)
+2. Valideren/bevestigen: H5F.js (https://github.com/ryanseddon/H5F)
+3. Single page apps: Choona.js (https://github.com/nsisodiya/choona.js)
+4. Events: Hamster.js (https://github.com/monospaced/hamster.js)
+5. Dom Selector: DOMpteur (https://github.com/SimonWaldherr/DOMpteur)
+
