@@ -7,17 +7,17 @@ var cmdGeo = cmdGeo || {};
 (function() {
 
 	// Variable declaration
-	SANDBOX = 'SANDBOX';
-	LINEAIR = 'LINEAIR';
-	GPS_AVAILABLE = 'GPS_AVAILABLE';
-	GPS_UNAVAILABLE = 'GPS_UNAVAILABLE';
-	POSITION_UPDATED = 'POSITION_UPDATED';
-	REFRESH_RATE = 1000;
-	currentPosition = currentPositionMarker = customDebugging = debugId = map = interval =intervalCounter = updateMap = false;
-	locatieRij = markerRij = [];	
+    cmdGeo.SANDBOX = 'SANDBOX';
+    cmdGeo.LINEAIR = 'LINEAIR';
+    cmdGeo.GPS_AVAILABLE = 'GPS_AVAILABLE';
+    cmdGeo.GPS_UNAVAILABLE = 'GPS_UNAVAILABLE';
+    cmdGeo.POSITION_UPDATED = 'POSITION_UPDATED';
+    cmdGeo.REFRESH_RATE = 1000;
+    cmdGeo.currentPosition = currentPositionMarker = customDebugging = debugId = map = interval =intervalCounter = updateMap = false;
+    cmdGeo.locatieRij = markerRij = [];
 
 	// We maken hier een namespace aan: een globale variabele
-	cmdGeo.controller {
+	cmdGeo.controller = {
 		init: function() {
 			cmdGeo.gps.init();
 			cmdGeo.map.init();
@@ -38,7 +38,7 @@ var cmdGeo = cmdGeo || {};
 		},
 
 		// Start een interval welke op basis van REFRESH_RATE de positie updated
-		_start_interval: function() {
+		startInterval: function() {
 		    debug_message("GPS is beschikbaar, vraag positie.");
 		    _update_position();
 		    interval = self.setInterval(_update_position, REFRESH_RATE);
@@ -46,13 +46,13 @@ var cmdGeo = cmdGeo || {};
 		},
 
 		// Vraag de huidige positie aan geo.js, stel een callback in voor het resultaat
-		_update_position: function() {
+		updatePosition: function() {
 		    intervalCounter++;
 		    geo_position_js.getCurrentPosition(_set_position, _geo_error_handler, {enableHighAccuracy:true});
 		},
 
 		// Callback functie voor het instellen van de huidige positie, vuurt een event af
-		_set_position: function() {
+		setPosition: function() {
 		    currentPosition = position;
 		    ET.fire("POSITION_UPDATED");
 		    debug_message(intervalCounter+" positie lat:"+position.coords.latitude+" long:"+position.coords.longitude);
@@ -60,7 +60,7 @@ var cmdGeo = cmdGeo || {};
 
 		// Controleer de locaties en verwijs naar een andere pagina als we op een locatie zijn
 
-		_check_locations: function(event) {
+		checkLocations: function(event) {
 		    // Liefst buiten google maps om... maar helaas, ze hebben alle coole functies
 		    for (var i = 0; i < locaties.length; i++) {
 		        var locatie = {coords:{latitude: locaties[i][3],longitude: locaties[i][4]}};
@@ -86,7 +86,7 @@ var cmdGeo = cmdGeo || {};
 		},
 
 		// Bereken het verchil in meters tussen twee punten
-		_calculate_distance: function(p1, p2) {
+		calculateDistance: function(p1, p2) {
 		    var pos1 = new google.maps.LatLng(p1.coords.latitude, p1.coords.longitude);
 		    var pos2 = new google.maps.LatLng(p2.coords.latitude, p2.coords.longitude);
 		    return Math.round(google.maps.geometry.spherical.computeDistanceBetween(pos1, pos2), 0);
@@ -107,7 +107,7 @@ var cmdGeo = cmdGeo || {};
 		 *  @param canvasID:string - het id van het HTML element waar de
 		 *      kaart in ge-rendered moet worden, <div> of <canvas>
 		 */
-		 generate_map: function(myOptions, canvasId) {
+		generate: function(myOptions, canvasId) {
 			// TODO: Kan ik hier asynchroon nog de google maps api aanroepen? dit scheelt calls
 		    debug_message("Genereer een Google Maps kaart en toon deze in #"+canvasId)
 		    map = new google.maps.Map(document.getElementById(canvasId), myOptions);
@@ -165,18 +165,18 @@ var cmdGeo = cmdGeo || {};
 
 		    // Zorg dat de kaart geupdated wordt als het POSITION_UPDATED event afgevuurd wordt
 		    ET.addListener(POSITION_UPDATED, update_positie);
-		 },
+		},
 
-		 isNumber: function(n) {
-			return !isNaN(parseFloat(n)) && isFinite(n);
-		 },
+        isNumber: function(n) {
+            return !isNaN(parseFloat(n)) && isFinite(n);
+        },
 
 		// Update de positie van de gebruiker op de kaart
-		update_positie: function(event) {
+		updatePosition: function(event) {
 		    // use currentPosition to center the map
 		    var newPos = new google.maps.LatLng(currentPosition.coords.latitude, currentPosition.coords.longitude);
 		    map.setCenter(newPos);
-		    currentPositionMarker.setPosition(newPos);
+	        currentPositionMarker.setPosition(newPos);
 		}
 	};
 
