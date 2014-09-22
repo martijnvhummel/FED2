@@ -1,0 +1,102 @@
+// ----------------------------
+// Imports - Bootstrap
+// ----------------------------
+
+@import "../../static/less/vendor/variables.less";
+@import "../../static/less/vendor/mixins.less";
+// // @import "../../static/less/vendor/carousel.less";
+
+
+
+// ----------------------------
+// Variabelen
+// ----------------------------
+
+// Kleuren
+@red:               		#c23824;
+
+// Fonts
+@font-family-sans-serif:	'Lato', sans-serif;
+
+
+
+// ----------------------------
+// Basis opmaak
+// ----------------------------
+
+*, h1, h2, h3, p {
+	margin: 0;
+	padding: 0;
+}
+
+body {
+	background: @red;
+	font-family: @font-family-sans-serif;
+}
+
+h1 {
+	text-transform: uppercase;
+	font-weight: 700;
+}
+
+h1 {
+	margin: 0 0 25px 0;
+}
+
+h2 {
+	margin: 0 0 5px 0;
+}
+
+p {
+	margin: 0 0 25px 0;
+	font-size: 21px;
+	font-weight: 400;
+}
+
+em {
+	font-size: 16px;
+}
+
+// ----------------------------
+// Section opmaak
+// ----------------------------
+
+main > section {
+	display: none;
+	padding: 100px 0;
+
+	&.active {
+		display: block;
+	}
+}
+
+// Opmaak section contentMovies
+section#contentMovies {
+	article {
+		margin: 0 0 50px 0;
+
+		> header {
+			margin: 0 0 25px 0;
+		}
+	}
+
+	img {
+		width: 100%;
+	}	
+}
+
+
+
+img {
+	.img-responsive;
+}
+
+@media (min-width: @screen-xs-min) {
+
+}
+@media (min-width: @screen-sm-min) {
+
+}
+@media (min-width: @screen-md-min) {
+
+}

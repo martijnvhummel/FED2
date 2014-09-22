@@ -1,0 +1,138 @@
+/* Bron: ‘How To Create A Responsive Navigation’, Thoriq Firdaus, bron geraadpleegd op 15 november 2013, http://www.hongkiat.com/blog/responsive-web-nav/ */
+
+/* Clearfix */
+.clearfix:before,
+.clearfix:after {
+    content: " ";
+    display: table;
+}
+.clearfix:after {
+    clear: both;
+}
+.clearfix {
+    *zoom: 1;
+    z-index: 100;
+}
+
+/* Basic Styles */
+/*body {
+	background-color: #ece8e5;
+}*/
+#nav-header {
+	height: 66px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+nav {
+	height: 66px;
+	width: 100%;
+}
+
+nav li {
+	display: inline;
+}
+
+nav a {
+	color: #fff;
+	font-size: 15px;
+	height: 66px;	
+	line-height: 66px;
+	margin: 0 25px 0 0;
+	-webkit-transition: background-color 0.7s ease;
+	-moz-transition: background-color 0.7s ease;
+	-o-transition: background-color 0.7s ease;
+	transition: background-color 0.7s ease;
+}
+
+nav a:hover, nav a:focus {
+	text-decoration: none;
+}
+
+nav a#pull {
+	display: none;
+}
+
+/*Styles for screen 770px and lower*/
+@media screen and (max-width: 770px) {
+	nav { 
+  		height: auto;
+  	}
+  	nav ul {
+  		width: 100%;
+  		display: block;
+  		height: auto;
+  	}
+  	nav li {
+  		width: 20%;
+  		float: left;
+  		position: relative;
+  		text-align: center;
+  	}
+  	nav li a {
+/*		border-bottom: 1px solid #576979;*/
+/*		border-right: 1px solid #576979;*/
+	}
+  	nav a {
+	  	text-align: center;
+	  	width: 100%;
+/*	  	text-indent: 25px;*/
+  	}
+
+	#nav-header .container {
+		padding: 0;
+	}
+}
+
+/*Styles for screen 515px and lower*/
+@media only screen and (max-width : 480px) {
+	nav {
+		border-bottom: 0;
+		background-color: #455868;	
+	}
+
+	nav li {
+		width: 50%;
+	}
+
+	nav ul {
+		display: none;
+		height: auto;
+	}
+
+	nav a {
+		height: auto;
+		line-height: 40px;
+	}
+
+	nav a#pull {
+		display: block;
+		background-color: #283744;
+		width: 100%;
+		position: relative;
+	}
+	nav a#pull:after {
+		content:"";
+		background: url('nav-icon.png') no-repeat;
+		width: 30px;
+		height: 30px;
+		display: inline-block;
+		position: absolute;
+		right: 15px;
+		top: 10px;
+	}
+}
+
+/*Smartphone*/
+@media only screen and (max-width : 320px) {
+	nav li {
+		display: block;
+		float: none;
+		width: 100%;
+	}
+	nav li a {
+		border-bottom: 1px solid #576979;
+	}
+}
