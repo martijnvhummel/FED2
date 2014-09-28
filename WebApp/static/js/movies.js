@@ -107,8 +107,8 @@ var moviesApp = moviesApp || {};
 	moviesApp.sections = {
 		init: function() {
 			// Hier roep ik onderstaande about & movies methods op
-			moviesApp.sections.about();
-			moviesApp.sections.movies();			
+			this.about();
+			this.movies();			
 		},
 		about: function() {
 			// Data uit about object in content object wordt naar de DOM gestuurd
@@ -116,8 +116,47 @@ var moviesApp = moviesApp || {};
 		},		
 		movies: function() {
 			// Data uit movies object in content object wordt naar de DOM gestuurd
-			Transparency.render(document.getElementById('movieCollection'), moviesApp.content.movies, moviesApp.config.moviesDirectives);					
+			//Transparency.render(document.getElementById('movieCollection'), moviesApp.content.movies, moviesApp.config.moviesDirectives);
+
+			// Als de data al in de local storage staat
+			if(localStorage.getItem('movies')) {
+				console.log('local');
+
+				var movieData = localStorage.getItem('movies');
+
+				// Tekst wordt omgezet in objecten
+				console.log(JSON.parse(movieData));
+				// Wordt de data uit de local storage in de HTML gezet.
+				Transparency.render(document.getElementById('movieCollection'), movieData, moviesApp.config.moviesDirectives);
+				
+				// Log parsed JSON, --> er worden weer javascript objects van gemaakt van de tekst
+				//console.log('parsed response', movieData);	
+			}
+
+			// Als de data nog niet in de local storage staat, wordt het opgehaald van de API en wordt het alsnog in de local storage gezet.
+			else {
+				console.log('external');
+				// XHR object wordt hier gebruikt om de data van de API te halen.
+				moviesApp.config.xhr.trigger('GET', 'http://dennistel.nl/movies', function(response) {
+
+					// Als het nog niet in de local storage staat, wordt het er alsnog ingezet.
+					localStorage.setItem('movies', response);
+			
+					// Variabele movieData is gelijk aan de JSON parse
+					var movieData = JSON.parse(response);
+
+					// Log JSON response text --> terug als tekst
+					//console.log ('responseText', response);
+
+					// Log parsed JSON, --> er worden weer javascript objects van gemaakt van de tekst
+					//console.log('parsed response', movieData);			
+
+					// movieData = data uit API, wordt in de HTML geplaatst
+					Transparency.render(document.getElementById('movieCollection'), movieData, moviesApp.config.moviesDirectives);
+				});
+			}
 		},
+
 		toggle: function(section) {
 			// removeClassActiveFromSections functie in utils object wordt aangeroepen
 			moviesApp.utils.removeClassActiveFromSections();
@@ -161,10 +200,29 @@ var moviesApp = moviesApp || {};
 					return this.cover;
 				}
 			}
-		}		
+		},
+
+		// XHR object
+		xhr: {
+			trigger: function (type, url, success, data) {
+				var req = new XMLHttpRequest;
+				req.open(type, url, true);
+
+				req.setRequestHeader('Content-type','application/json');
+
+				type === 'POST' ? req.send(data) : req.send(null);
+
+				req.onreadystatechange = function() {
+					if (req.readyState === 4) {
+						if (req.status === 200 || req.status === 201) {
+							success(req.responseText);
+						}
+					}
+				}
+			}
+		}				
 	}	
 
 	// Stap 1: Hij start controller.init
 	moviesApp.controller.init();
-
 })();
