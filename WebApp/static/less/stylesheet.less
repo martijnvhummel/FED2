@@ -13,11 +13,15 @@
 // ----------------------------
 
 // Kleuren
-@red:               		#c23824;
+// @red:               		#c23824;
+// @red:               		#2D2D2D;
+@darkGrey:					#181818;
+@title:						#fff;
+@border:					#d8d8d8;
 
 // Fonts
-@font-family-sans-serif:	'Lato', sans-serif;
-
+@font-family-title:			'Lato', sans-serif;
+@font-family-sans-serif:	'Open Sans', sans-serif;
 
 
 // ----------------------------
@@ -25,16 +29,20 @@
 // ----------------------------
 
 *, h1, h2, h3, p {
+	color: @border !important;
 	margin: 0;
 	padding: 0;
 }
 
 body {
-	background: @red;
+	background: @darkGrey;
 	font-family: @font-family-sans-serif;
 }
 
 h1 {
+	color: @title;
+	font-family: @font-family-title;
+	font-size: 26px;
 	text-transform: uppercase;
 	font-weight: 700;
 }
@@ -43,18 +51,91 @@ h1 {
 	margin: 0 0 25px 0;
 }
 
-h2 {
-	margin: 0 0 5px 0;
+h2, h3 {
+	color: @title;
+	font-family: @font-family-title;
+	font-size: 30px;
+	margin: 0 0 15px 0;
 }
 
 p {
+	color: @title;
 	margin: 0 0 25px 0;
 	font-size: 21px;
 	font-weight: 400;
 }
 
+a {
+	color: @title;
+
+	&:hover {
+		text-decoration: none;
+	}
+}
+
 em {
 	font-size: 16px;
+}
+
+.btn {
+	background: rgba(255, 255, 255, .15);
+	border-radius: 5px;
+	cursor: pointer;
+	height: 49px;
+	line-height: 45px;
+	padding: 0 15px;
+	width: auto;
+}
+
+#naarMenu {
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+}
+
+@media (min-width: @screen-md-min) {
+	h1 {
+		font-size: 36px;
+	}
+}
+
+
+// ----------------------------
+// Filter opmaak
+// ----------------------------
+#movieGenres {
+	// margin: 0 0 25px 0;
+	margin: 0;
+
+	#movieGenresList {
+		display: none;
+		opacity: 0;
+	}
+
+	ul {
+		margin-bottom: 20px;
+		li {
+			display: inline-block;
+			margin: 0 25px 0 0;
+			a {
+				color: #fff;
+				font-size: 15px;
+				text-decoration: none;
+			}
+		}
+	}
+}
+
+#filterToggle {
+	.btn;
+	display: inline-block;
+}
+
+#myElement {
+	// background: silver;
+	height: 300px;
+	text-align: center;
 }
 
 // ----------------------------
@@ -71,9 +152,10 @@ main > section {
 }
 
 // Opmaak section contentMovies
-section#contentMovies {
+section#contentMovies, section#detailPagina {
 	article {
-		margin: 0 0 50px 0;
+		margin: 0 0 25px 0;
+		padding: 0 0 25px 0;
 
 		> header {
 			margin: 0 0 25px 0;
@@ -81,7 +163,8 @@ section#contentMovies {
 	}
 
 	img {
-		width: 100%;
+		// width: 100%;
+		width: 50%;
 	}	
 }
 
@@ -91,12 +174,242 @@ img {
 	.img-responsive;
 }
 
+
+// ----------------------------	
+// Section contentMovies films
+// ----------------------------
+section#contentHome {
+	background: url("../../images/background-image.jpg");
+	background-size: cover;
+	background-position: 70% 100%;
+	background-repeat: no-repeat;	
+
+	height: 100vh;
+
+	header {
+		position: absolute;
+		top: 50%;
+		h1 {
+			text-align: left;
+			// width: 500px;
+			width: 100%;
+		}	
+	}
+}
+
+@media (min-width: @screen-md-min) {
+	section#contentHome {
+		background-position: 0% 100%;
+		header {
+			h1 {
+				width: 500px;
+			}
+		}
+	}
+}
+
+
+
+// ----------------------------	
+// Section contentAbout
+// ----------------------------
+section#contentAbout {
+	background: url("../../images/background-image.jpg");
+	background-size: cover;
+	background-position: 0% 100%;
+	background-repeat: no-repeat;
+
+	height: 100vh;
+}
+
+
+// ----------------------------	
+// Section contentMovies films
+// ----------------------------
+
+section#contentMovies {
+
+	article {
+		border-bottom: 2px solid @border;
+
+		&:nth-last-of-type(1) {
+			border: none;
+		}
+	}
+
+	#movieCollection {
+		.col-sm-3 {
+			margin: 0 0 25px 0;
+		}
+		.col-sm-9 {
+			p {
+				margin: 0 0 25px 0;
+
+				&:nth-last-of-type(1) {
+					margin: 0;
+				}
+			}			
+		}
+	}
+}
+
+
+// ----------------------------
+// Section detailPagina films
+// ----------------------------
+#detailPagina {
+
+	.row {
+		&.first {
+			margin-bottom: 25px;
+			padding-bottom: 25px;
+
+			.col-sm-3 {
+				margin: 0 0 25px 0;
+			}
+		}
+	}
+
+	.acteurs {
+		.row {
+			margin-bottom: 12.5px;
+			padding-bottom: 12.5px;
+			border-bottom: 2px solid @border;
+
+			&:nth-last-of-type(1) {
+				border: none;
+				margin-bottom: 0;
+			}
+
+			.col-xs-12 {
+
+				figure {
+					float: left;
+					// height: 109px;
+					margin-right: 10px;
+					vertical-align: top;
+					width: 75px;
+
+					img {
+						width: 50%;
+					}
+				}
+				.mediaBody {
+					display: table-cell;
+					// height: 109px;
+
+					p {
+						margin: 0 0 5px 0;
+					}
+					a {
+						color: #fff;
+						// display: inline-block;
+						font-size: 16px;
+						margin: 0 0 5px 0;
+					}
+				}
+			}
+		}
+	}
+}
+
+// @media (max-width: @screen-sm-min) {
+// 	section#detailPagina {
+// 		.acteurs {
+// 			.row {
+// 				.col-sm-1 {
+// 					width: 24%;
+// 					display: inline-block;
+// 					vertical-align: top;
+// 				}
+// 				.acteurInfo {
+// 					width: 75%;
+// 					display: inline-block;
+// 					.col-sm-3 {
+// 						width: 100%;
+
+// 						a {
+// 							color: #fff;
+// 						}
+// 					}					
+// 				}
+// 			}
+// 		}
+// 	}	
+// }
+
 @media (min-width: @screen-xs-min) {
 
 }
-@media (min-width: @screen-sm-min) {
 
+@media (min-width: 480px) and (max-width: 768px) {
+// Section contentMovies films
+// ----------------------------	
+	section#contentMovies {
+		#movieCollection {
+			.col-sm-3 {
+				margin-bottom: 25px;
+				img {
+					width: 50%;
+				}
+			}
+		}
+	}
+
+// Section detailPagina films
+// ----------------------------
+	section#detailPagina {
+		.row {
+			&.first {
+				margin-bottom: 50px;
+
+				.col-sm-3 {
+					width: 50%;
+				}
+			}
+		}		
+	}	
 }
+
+@media (min-width: @screen-sm-min) {
+	section#detailPagina {
+		.row {
+			&.first {
+				.col-sm-3 {
+					margin: 0;
+				}
+			}
+		}	
+		.acteurs {
+			.row {
+				.col-xs-12 {
+					figure {
+						float: left;
+						height: auto;
+						width: 10%;
+					}
+					.mediaBody {
+						float: left;
+						width: 88%;
+						p {
+							float: left;
+							padding: 0 15px;
+							position: relative;
+							// width: 22.5%;
+						}
+						a {
+							float: left;
+							padding: 0 15px;
+							position: relative;	
+							width: 44%;
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
 @media (min-width: @screen-md-min) {
 
 }

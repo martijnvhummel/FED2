@@ -56,7 +56,7 @@ nav a#pull {
 }
 
 /*Styles for screen 770px and lower*/
-@media screen and (max-width: 770px) {
+/*@media screen and (max-width: 770px) {
 	nav { 
   		height: auto;
   	}
@@ -72,22 +72,19 @@ nav a#pull {
   		text-align: center;
   	}
   	nav li a {
-/*		border-bottom: 1px solid #576979;*/
-/*		border-right: 1px solid #576979;*/
 	}
   	nav a {
 	  	text-align: center;
 	  	width: 100%;
-/*	  	text-indent: 25px;*/
   	}
 
 	#nav-header .container {
 		padding: 0;
 	}
-}
+}*/
 
 /*Styles for screen 515px and lower*/
-@media only screen and (max-width : 480px) {
+/*@media only screen and (max-width : 480px) {
 	nav {
 		border-bottom: 0;
 		background-color: #455868;	
@@ -123,10 +120,10 @@ nav a#pull {
 		right: 15px;
 		top: 10px;
 	}
-}
+}*/
 
 /*Smartphone*/
-@media only screen and (max-width : 320px) {
+/*@media only screen and (max-width : 320px) {
 	nav li {
 		display: block;
 		float: none;
@@ -135,4 +132,4 @@ nav a#pull {
 	nav li a {
 		border-bottom: 1px solid #576979;
 	}
-}
+}*/

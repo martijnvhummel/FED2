@@ -15,7 +15,6 @@ var moviesApp = moviesApp || {};
 	// Controller object
 	moviesApp.controller = {
 		init: function() {
-
 			// Stap 2: config.init wordt aangeroepen vanuit controller
 			moviesApp.config.init();			
 			// Stap 3: router.init wordt aangeroepen vanuit controller
@@ -30,77 +29,90 @@ var moviesApp = moviesApp || {};
 	moviesApp.router = {
 		init: function() {
 			routie({
+				'home': function() {
+					console.log("Home route is aangeklikt");
+					moviesApp.sections.home();
+					moviesApp.sections.toggle("contentHome");
+				},
+
 			    'about': function() {
 			    	console.log("About route is aangeklikt");
 			    	// Als 'about' de route is:
 			    	// Spreek toggle method aan en geef de parameter de waarde van de section id
 			    	moviesApp.sections.toggle("contentAbout");
 			    },
+			    'spinner': function() {
+			    	moviesApp.sections.toggle('contentLoader');
+			    },			    
 			    'movies': function() {
 			    	console.log("Movies route is aangeklikt");
-			    	// Als 'movies' de route is:
-			    	// Spreek toggle method aan en geef de parameter de waarde van de section id
+
+			    	moviesApp.sections.toggle('contentLoader');
+
+			    	// Time delay, zodat de spinner wordt getoond.
+			    	setTimeout(function(){
+				    	moviesApp.sections.movies();
+				    	// Als 'movies' de route is:
+				    	// Spreek toggle method aan en geef de parameter de waarde van de section id
+				    	moviesApp.sections.toggle("contentMovies");
+			    	}, 2000);
+
+			    },
+			    // 'movies/details/:id': function(id) {
+			    // 	console.log("Movie detailspagina aangeklikt");
+
+			    // 	moviesApp.sections.details(id);
+			    // 	moviesApp.sections.toggle("detailPagina");
+			    // }, 
+			    'movies/details/:title': function(title) {
+			    	console.log("Movie detailspagina aangeklikt");
+
+			    	moviesApp.sections.details(title);
+			    	moviesApp.sections.toggle("detailPagina");
+			    }, 			    
+			    'movies/genre/:genre': function(genre) {
+			    	console.log("Genre is aangeklikt")
+
+			    	moviesApp.sections.movies(genre);
 			    	moviesApp.sections.toggle("contentMovies");
 			    },
 			    // Als je niet 'about' of 'movies' achter de link hebt gezet, laat hij altijd movies zien.
 			    '*': function() {
-			    	console.log("Geen route is aangeklikt");
+			    	console.log("Geen route is aangeklikt");	    	
 			    	// Spreek toggle method aan en geef de parameter de waarde van de section id
-			    	moviesApp.sections.toggle("contentMovies");
-			    }			    
+			    	// Time delay, zodat de spinner wordt getoond.
+				    	// moviesApp.sections.movies();
+				    	// Als 'movies' de route is:
+				    	// Spreek toggle method aan en geef de parameter de waarde van de section id
+				    	// moviesApp.sections.toggle("contentMovies");
+				    moviesApp.sections.home();
+			    	moviesApp.sections.toggle("contentHome");
+			    }
 			});			
 		}
 	};
 
 	// Content object - Hier plaats je alle content
 	moviesApp.content = {
+		home: {
+			title: 'Bekijk het aanbod van Your Favourite Movies'
+		},
+
 		about: {
 			title: 'About this app',
 			// description: 'Beschrijving paragraaf'
 			descriptions: [ 
 				{
-					description: 'Beschrijving paragraaf 1'
+					description: 'Bekijk de leukste films gewoon thuis!'
 				}, 
 				{
-					description: 'Beschrijving paragraaf 2'
+					description: 'Bepaal welke films jij wilt zien.'
 				}, 
 				{
-					description: 'Beschrijving paragraaf 3'
-				}, 
-				{
-			  		description: 'Beschrijving paragraaf 4'
-				}        
+					description: 'Vind informatie over jouw favoriete films en acteurs.'
+				}       
 			]			
-		},
-
-		// Movies array met daar in:
-		// Voor elke film een object met properties
-		movies: [
-			{
-				title: 'Shawshank Redemption',
-				releaseDate: 'Release date: 14 October 1994',
-				description: 'Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.',
-				cover: 'images/shawshank-redemption.jpg'
-			},
-			{
-				title: 'The Godfather',
-				releaseDate: 'Release date: 24 March 1972',
-				description: 'The aging patriarch of an organized crime dynasty transfers control of his clandestine empire to his reluctant son.',
-				cover: 'images/the-godfather.jpg'
-			},
-			{
-				title: 'Pulp Fiction',
-				releaseDate: 'Release date: 14 October 1994',
-				description: "The lives of two mob hit men, a boxer, a gangster's wife, and a pair of diner bandits intertwine in four tales of violence and redemption.",
-				cover: 'images/pulp-fiction.jpg'
-			},
-			{
-				title: 'The Dark Knight',
-				releaseDate: 'Release date: 18 July 2008',
-				description: 'When Batman, Gordon and Harvey Dent launch an assault on the mob, they let the clown out of the box, the Joker, bent on turning Gotham on itself and bringing any heroes down to his level.',
-				cover: 'images/the-dark-knight.jpg'
-			}			
-		]
+		}
 	};
 
 	// Sections object - Hier render je de content naar de DOM, door middel van Transparency
@@ -108,25 +120,39 @@ var moviesApp = moviesApp || {};
 		init: function() {
 			// Hier roep ik onderstaande about & movies methods op
 			this.about();
-			this.movies();			
+			// this.movies();			
+		},
+
+		home: function() {
+			Transparency.render(document.getElementById('contentHome'), moviesApp.content.home);
 		},
 		about: function() {
 			// Data uit about object in content object wordt naar de DOM gestuurd
 			Transparency.render(document.getElementById('contentAbout'), moviesApp.content.about);
-		},		
-		movies: function() {
+		},	
+		movies: function(genre) {
 			// Data uit movies object in content object wordt naar de DOM gestuurd
 			//Transparency.render(document.getElementById('movieCollection'), moviesApp.content.movies, moviesApp.config.moviesDirectives);
 
-			// Als de data al in de local storage staat
+			// Als de data al in de local storage staat, wordt de data uit localstorage in de DOM geplaatst.
 			if(localStorage.getItem('movies')) {
 				console.log('local');
 
-				var movieData = localStorage.getItem('movies');
+				// movieData staat gelijk aan de data die uit de local storage wordt gehaald, geparsed: in daadwerkelijke objects
+				var movieData = JSON.parse(localStorage.getItem('movies'));
 
-				// Tekst wordt omgezet in objecten
-				console.log(JSON.parse(movieData));
-				// Wordt de data uit de local storage in de HTML gezet.
+				// Als er een genre is opgegeven, anders laat hij geen films zien als er geen genre is. 
+				if(genre != undefined) {
+					// Filter op movieData
+					// Moviedata is alle films, movie is 1 film
+					//_.filter loopt door alle films en zet dit in var movie
+					movieData =	_.filter(movieData, function(movie) {
+						// Vergelijkt of het 1 van de genres van een film (movie.genres) overeenkomt met het genre dat is meegegeven in de routie route (genre)
+						return _.contains(movie.genres, genre);
+					});
+				}		
+
+				// Data wordt in DOM gezet
 				Transparency.render(document.getElementById('movieCollection'), movieData, moviesApp.config.moviesDirectives);
 				
 				// Log parsed JSON, --> er worden weer javascript objects van gemaakt van de tekst
@@ -137,25 +163,71 @@ var moviesApp = moviesApp || {};
 			else {
 				console.log('external');
 				// XHR object wordt hier gebruikt om de data van de API te halen.
-				moviesApp.config.xhr.trigger('GET', 'http://dennistel.nl/movies', function(response) {
+				moviesApp.config.xhr.trigger('GET', 'http://dennistel.nl/movies', function(response) {					
 
-					// Als het nog niet in de local storage staat, wordt het er alsnog ingezet.
-					localStorage.setItem('movies', response);
-			
-					// Variabele movieData is gelijk aan de JSON parse
-					var movieData = JSON.parse(response);
+					// De respons (in tekst) wordt gemanipuleerd in manipulateMovieData
+					moviesApp.utils.manipulateMovieData(response);
 
-					// Log JSON response text --> terug als tekst
-					//console.log ('responseText', response);
+					// Haalt de data weer uit de localstorage (geparsed)
+					var movieData = JSON.parse(localStorage.getItem('movies'));
 
-					// Log parsed JSON, --> er worden weer javascript objects van gemaakt van de tekst
-					//console.log('parsed response', movieData);			
+					if(genre != undefined) {
+						// Filter op movieData
+						// Moviedata is alle films, movie is 1 film
+						//_.filter loopt door alle films en zet dit in var movie
+						movieData =	_.filter(movieData, function(movie) {
+							// Vergelijkt of het 1 van de genres van een film (movie.genres) overeenkomt met het genre dat is meegegeven in de routie route (genre)
+							return _.contains(movie.genres, genre);
+						});
+					}						
 
-					// movieData = data uit API, wordt in de HTML geplaatst
+					// movieData = data uit API, wordt in de DOM geplaatst
 					Transparency.render(document.getElementById('movieCollection'), movieData, moviesApp.config.moviesDirectives);
 				});
 			}
 		},
+		details: function (title) {
+			// 	var movieData = JSON.parse(localStorage.getItem('movies'));
+
+			if(localStorage.getItem('movies')) {
+
+				// 	// Data uit about object in content object wordt naar de DOM gestuurd
+				// 	Transparency.render(document.getElementById('movieCollection'), movieData, moviesApp.config.moviesDirectives);
+					var movieData = JSON.parse(localStorage.getItem('movies'));	
+
+					// Detailpagina filter: bekijkt of ingevoerde title in de router overeenkomt met de titel van de url v
+					if(title != undefined) {
+						console.log("Er is een movie id meegegeven.");
+						movieData =	_.filter(movieData, function(movie) {
+							return movie.title.replace(/\s+/g, '-').toLowerCase() == title;
+						});
+						Transparency.render(document.getElementById('detailPagina'), movieData, moviesApp.config.moviesDirectives);
+						console.log(movieData);					
+					}
+			} else {
+				moviesApp.config.xhr.trigger('GET', 'http://dennistel.nl/movies', function(response) {					
+
+					// De respons (in tekst) wordt gemanipuleerd in manipulateMovieData
+					moviesApp.utils.manipulateMovieData(response);
+
+					// Haalt de data weer uit de localstorage (geparsed)
+					var movieData = JSON.parse(localStorage.getItem('movies'));			
+
+					// Detailpagina filter: bekijkt of ingevoerde title in de router overeenkomt met de titel van de url v
+					if(title != undefined) {
+						console.log("Er is een movie id meegegeven.");
+						movieData =	_.filter(movieData, function(movie) {
+							return movie.title.replace(/\s+/g, '-').toLowerCase() == title;
+						});
+						Transparency.render(document.getElementById('detailPagina'), movieData, moviesApp.config.moviesDirectives);
+						console.log(movieData);					
+					}
+
+					// movieData = data uit API, wordt in de DOM geplaatst
+					Transparency.render(document.getElementById('detailPagina'), movieData, moviesApp.config.moviesDirectives);
+				});
+			}
+		},	
 
 		toggle: function(section) {
 			// removeClassActiveFromSections functie in utils object wordt aangeroepen
@@ -176,7 +248,32 @@ var moviesApp = moviesApp || {};
 	        for(var i = 0; i < allSections.length; i++) {
 	            allSections[i].classList.remove('active');
 	        }			
-		}
+		},
+		// Data manipulatie
+		manipulateMovieData: function(response) {
+			// Parset de data, waardoor het gemanipuleerd kan worden
+			var movieData = JSON.parse(response);
+
+			// Zorgt ervoor dat review gemiddelde wordt getoond en dat de directors achter elkaar (kunnen) worden gezet.
+			movieData =	_.map(movieData, function(movie, i) {
+				movie.reviews = _.reduce(movie.reviews, function(memo, review) {
+					return memo + review.score;
+				}, 0) / movie.reviews.length;
+				movie.directors = _.reduce(movie.directors, function(memo, director) {
+					return memo + director.name + ' ';
+				}, '')
+				return movie;
+			}, 0);
+
+			// Sorteert de films op filmnaam door middel van underscore.js
+			movieData = _.sortBy(movieData, function(movie) {
+				return movie.title;
+			});
+
+			// Zet de data in de local storage
+			// De gemanipuleerde data moet worden omgezet in tekst, om opgeslagen te worden in de local storage.
+			localStorage.setItem('movies', JSON.stringify(movieData));
+		}		
 	}
 
 	// Config object, iets wat je vooraf wilt aanroepen voor de app start
@@ -192,12 +289,70 @@ var moviesApp = moviesApp || {};
 			  return element.el.getAttribute('data-name') == key;
 			};			
 		},
+
 		// Wordt aangeroepen vanuit transparency (moviesApp.sections)		
 		moviesDirectives: {
 			// Dit zorgt ervoor dat de waarde van cover in het src="" attribuut terecht komt.
 			cover: {
 				src: function(params) {
 					return this.cover;
+				}
+			},
+
+			// De tekst "Reviewscijfer: " komt voor het gemiddelde cijfer te staan.
+			reviews: {
+				text: function() {
+					return "Cijfer: " + this.reviews;	
+				}
+			},
+
+			// De tekst "Regisseur(s) " komt voor de naam/namen van de regisseur(s) te staan.
+			directors: {
+				text: function() {
+					return "Regisseur(s): " + this.directors;
+				}
+			},
+
+			// Naar actors binnen de movie
+			actors: {
+				// De url_photo komt in de src van het HTML element terecht.
+				url_photo: {
+					src: function(params) {
+						return this.url_photo;
+					}
+				},
+				// De url_character komt in de href van de HTML link te staan.
+				url_character: {
+					href: function(params) {
+						return this.url_character;
+					},
+					// text: function(params) {
+					// 	return "Meer info over " + this.character;
+					// }
+					text: function(params) {
+						return params.value;
+					}
+				},
+				// De url_profile komt in de href van de HTML link te staan.
+				url_profile: {
+					href: function(params) {
+						return this.url_profile;
+					},
+					// text: function(params) {
+					// 	return "Meer info over " + this.actor_name;
+					// }
+					text: function(params) {
+						return params.value;
+					}
+				}								
+			},
+
+			url: {
+				href: function(params) {
+					return params.value + this.title.replace(/\s+/g, '-').toLowerCase();
+				},
+				text: function(params) {
+					return params.value;
 				}
 			}
 		},
